@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{subject}}</title>
+    {{{sharedStyles}}}
+</head>
+<body>
+    <div class="header marketing">
+        <h1>📢 {{subject}}</h1>
+    </div>
+
+    <div class="content">
+        {{{content}}}
+    </div>
+
+    {{#if unsubscribeLink}}
+    <div class="footer">
+        <p>Otrzymujesz tę wiadomość, ponieważ wyraziłeś zgodę na wiadomości marketingowe.</p>
+        <p><a href="{{unsubscribeLink}}">Zrezygnuj z wiadomości marketingowych</a></p>
+    </div>
+    {{/if}}
+</body>
+</html>

@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Address {
+  id           String  @id @default(uuid()) @db.Uuid
+  salonId      String  @unique @map("salon_id") @db.Uuid
+  salon        Salon   @relation(fields: [salonId], references: [id], onDelete: Cascade)
+  city         String  @default("")
+  streetName   String  @default("") @map("street_name")
+  streetNumber String  @default("") @map("street_number")
+  apartment    String?
+  postalCode   String  @default("") @map("postal_code") // TODO: CHECK
+
+  @@map("address")
+}
+
+model ContactInfo {
+  id           String  @id @default(uuid()) @db.Uuid
+  salonId      String  @unique @map("salon_id") @db.Uuid
+  salon        Salon   @relation(fields: [salonId], references: [id], onDelete: Cascade)
+  phone        String  @default("")
+  email        String  @default("")
+  instagramUrl String? @map("instagram_url")
+  facebookUrl  String? @map("facebook_url")
+
+  @@map("contact_info")
+}
+
+enum DayOfWeek {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
+}
+
+model OpenHours {
+  salonId   String    @map("salon_id") @db.Uuid
+  salon     Salon     @relation(fields: [salonId], references: [id], onDelete: Cascade)
+  dayOfWeek DayOfWeek
+  open      String
+  close     String
+
+  @@unique([salonId, dayOfWeek])
+  @@map("open_hours")
+}
+
+model ScheduleOverride {
+  id        String   @id @default(uuid()) @db.Uuid
+  salonId   String   @map("salon_id") @db.Uuid
+  startTime DateTime @map("start_time")
+  endTime   DateTime @map("end_time")
+  isWorking Boolean  @default(true)
+  salon     Salon    @relation(fields: [salonId], references: [id], onDelete: Cascade)
+
+  @@index([salonId, startTime, endTime])
+  @@map("schedule_overrides")
+}
+
+model Salon {
+  id               String             @id @default(uuid()) @db.Uuid
+  calendarId       String?            @unique @default(uuid()) @map("calendar_id") @db.Uuid
+  name             String
+  owner            User               @relation("SalonOwner", fields: [ownerId], references: [id])
+  ownerId          String             @map("owner_id") @db.Uuid
+  address          Address?
+  contactInfo      ContactInfo?
+  serviceGroups    ServiceGroup[]
+  promotions       Promotion[]
+  openHours        OpenHours[]
+  aboutUs          String             @default("") @map("about_us")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  scheduleOverride ScheduleOverride[]
+  slotStepMin      Int                @default(15)
+  frontendUrl String?
+  reminderMinutesBefore Int           @default(120) @map("reminder_minutes_before")
+
+  @@map("salon")
+}
+
+enum ServiceGroupStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model ServiceGroup {
+  id          String             @id @default(uuid()) @db.Uuid
+  salonId     String             @map("salon_id") @db.Uuid
+  salon       Salon              @relation(fields: [salonId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  status      ServiceGroupStatus @default(ACTIVE)
+  services    Service[]
+  promotions  Promotion[]
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+
+  @@map("service_group")
+}
+
+enum ServiceStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model Service {
+  id                   String        @id @default(uuid()) @db.Uuid
+  serviceGroup         ServiceGroup  @relation(fields: [serviceGroupId], references: [id], onDelete: Cascade)
+  serviceGroupId       String        @map("service_group_id") @db.Uuid
+  promotions           Promotion[]
+  name                 String
+  description          String
+  technicalBreakMin    Int           @default(0) @map("technical_break_min")
+  durationMin          Int           @default(0) @map("duration_min")
+  breakAfterServiceMin Int           @default(0) @map("break_after_service_min")
+  price                Decimal
+  status               ServiceStatus @default(ACTIVE)
+  reservations         Reservation[]
+  createdAt            DateTime      @default(now()) @map("created_at")
+  updatedAt            DateTime      @updatedAt @map("updated_at")
+
+  @@unique([serviceGroupId, name], name: "service_name_unique_per_group")
+  @@map("service")
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model Reservation {
+  id                   String            @id @default(uuid()) @db.Uuid
+  clientName           String            @map("client_name")
+  clientEmail          String            @map("client_email")
+  clientPhone          String            @map("client_phone")
+  clientNotes          String            @map("client_notes")
+  marketingConsent     Boolean           @default(false) @map("marketing_consent")
+  notificationsConsent Boolean           @default(true) @map("notifications_consent")
+  service              Service           @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  serviceId            String            @map("service_id") @db.Uuid
+  startTime            DateTime          @map("start_time")
+  status               ReservationStatus @default(PENDING)
+  price                Decimal
+  createdAt            DateTime          @default(now()) @map("created_at")
+  updatedAt            DateTime          @updatedAt @map("updated_at")
+  Promotion            Promotion?        @relation(fields: [promotionId], references: [id])
+  promotionId          String?           @map("used_promotion_id") @db.Uuid
+
+  @@index([startTime])
+  @@map("reservation")
+}
+
+model User {
+  id               String   @id @default(uuid()) @db.Uuid
+  firstName        String   @map("first_name")
+  lastName         String   @map("last_name")
+  email            String   @unique
+  passwordHash     String?  @map("password_hash")
+  refreshTokenHash String?  @map("refresh_token_hash")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @map("updated_at")
+  ownedSalons      Salon[]  @relation("SalonOwner")
+
+  @@map("user")
+}
+
+enum PromotionType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+enum PromotionStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model Promotion {
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String
+  salonId       String          @map("salon_id") @db.Uuid
+  salon         Salon           @relation(fields: [salonId], references: [id], onDelete: Cascade)
+  serviceGroups ServiceGroup[]
+  services      Service[]
+  startTime     DateTime        @map("start_time")
+  endTime       DateTime?       @map("end_time")
+  value         Decimal
+  type          PromotionType
+  status        PromotionStatus @default(ACTIVE)
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+  reservation   Reservation[]
+
+  @@map("promotion")
+}

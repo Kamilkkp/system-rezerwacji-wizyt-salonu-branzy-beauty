@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezerwacja anulowana</title>
+    {{{sharedStyles}}}
+</head>
+
+<body>
+    <div class="header danger">
+        <h1>❌ Rezerwacja anulowana</h1>
+        <p>Twoja rezerwacja została anulowana</p>
+    </div>
+
+    <div class="content">
+        <p>Witaj {{clientName}},</p>
+        <p>Informujemy, że Twoja rezerwacja została anulowana.</p>
+
+        <div class="reservation-details">
+            <h3>Szczegóły anulowanej rezerwacji:</h3>
+            <p><strong>Usługa:</strong> {{service.name}}</p>
+            <p><strong>Data i godzina:</strong> {{formatDateTime startTime}}</p>
+            <p><strong>Salon:</strong> {{service.serviceGroup.salon.name}}</p>
+        </div>
+
+        <div class="salon-info">
+            <h3>Informacje o salonie:</h3>
+            <p><strong>Adres:</strong> {{salon.address.streetName}} {{salon.address.streetNumber}} {{salon.address.apartment}}, {{salon.address.city}} {{salon.address.postalCode}}</p>
+            {{#if salon.contactInfo.phone}}
+            <p><strong>Telefon:</strong> {{salon.contactInfo.phone}}</p>
+            {{/if}}
+            {{#if salon.contactInfo.email}}
+            <p><strong>Email:</strong> {{salon.contactInfo.email}}</p>
+            {{/if}}
+        </div>
+
+        <div class="contact-info">
+            <h3>Masz pytania?</h3>
+            <p>Jeśli to nie Ty anulowałeś rezerwację lub masz pytania, prosimy o kontakt:</p>
+            <p><strong>Telefon:</strong> {{service.serviceGroup.salon.contactInfo.phone}}</p>
+            <p><strong>Email:</strong> {{service.serviceGroup.salon.contactInfo.email}}</p>
+        </div>
+
+        <p><strong>Zapraszamy do ponownej rezerwacji!</strong></p>
+        <p>Pozdrawiamy,<br><strong>Zespół {{service.serviceGroup.salon.name}}</strong></p>
+    </div>
+
+    <div class="footer">
+        <p>Otrzymujesz tę wiadomość, ponieważ wyraziłeś zgodę na powiadomienia.</p>
+        <p><a href="{{unsubscribeLink}}">Zrezygnuj z powiadomień</a></p>
+        <p>© {{service.serviceGroup.salon.name}} - Wszystkie prawa zastrzeżone</p>
+    </div>
+</body>
+
+</html>

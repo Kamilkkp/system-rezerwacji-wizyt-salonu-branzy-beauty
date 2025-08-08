@@ -1,0 +1,26 @@
+# AWS Configuration
+aws_region = "us-east-1"
+environment = "production"
+
+# VPC Configuration
+vpc_cidr = "10.0.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b"]
+private_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
+public_subnet_cidrs = ["10.0.101.0/24", "10.0.102.0/24"]
+
+# Database Configuration
+db_name = "backend_db"
+db_username = "postgres"
+db_password = "your-secure-password-here"
+
+# Application Configuration
+app_port = 3000
+app_instance_type = "t3.small"
+
+# Environment Variables (Sensitive - replace with your values)
+bms_frontend_url = "https://business-panel-two.vercel.app"
+app_service_email = "example@mail.com"
+aws_access_key_id = "aws_access_key_id"
+aws_secret_access_key = "aws_secret_access_key"
+jwt_secret = "your-super-secret-jwt-key-change-this"
+jwt_refresh_secret = "your-super-secret-jwt-refresh-key-change-this" 

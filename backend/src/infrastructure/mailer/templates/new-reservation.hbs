@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nowa rezerwacja</title>
+    {{{sharedStyles}}}
+</head>
+
+<body>
+    <div class="header primary">
+        <h1>✅ Dziękujemy za rezerwację!</h1>
+        <p>Twoja rezerwacja została przyjęta i oczekuje na potwierdzenie</p>
+    </div>
+
+    <div class="content">
+        <p>Witaj {{clientName}},</p>
+        <p>Twoja rezerwacja została przyjęta i oczekuje na potwierdzenie przez salon.</p>
+
+        <div class="reservation-details">
+            <h3>Szczegóły rezerwacji:</h3>
+            <ul>
+                <li><strong>Usługa:</strong> {{service.name}}</li>
+                <li><strong>Data i godzina:</strong> {{formatDateTime startTime}}</li>
+                <li><strong>Cena:</strong> {{price}} zł</li>
+                <li><strong>Salon:</strong> {{service.serviceGroup.salon.name}}</li>
+            </ul>
+        </div>
+
+        <div class="salon-info">
+            <h3>Informacje o salonie:</h3>
+            <p><strong>Adres:</strong> {{salon.address.streetName}} {{salon.address.streetNumber}} {{salon.address.apartment}}, {{salon.address.city}} {{salon.address.postalCode}}</p>
+            {{#if salon.contactInfo.phone}}
+            <p><strong>Telefon:</strong> {{salon.contactInfo.phone}}</p>
+            {{/if}}
+            {{#if salon.contactInfo.email}}
+            <p><strong>Email:</strong> {{salon.contactInfo.email}}</p>
+            {{/if}}
+        </div>
+
+        <div class="contact-info">
+            <h3>Kontakt z salonem:</h3>
+            <p><strong>Telefon:</strong> {{service.serviceGroup.salon.contactInfo.phone}}</p>
+            <p><strong>Email:</strong> {{service.serviceGroup.salon.contactInfo.email}}</p>
+        </div>
+
+        <p>Pozdrawiamy,<br><strong>Zespół {{service.serviceGroup.salon.name}}</strong></p>
+
+        <div style="text-align: center; margin: 25px 0;">
+            <a href="{{reservationDetailsLink}}" class="button">Zobacz szczegóły rezerwacji</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Otrzymujesz tę wiadomość, ponieważ wyraziłeś zgodę na powiadomienia.</p>
+        <p><a href="{{unsubscribeLink}}">Zrezygnuj z powiadomień</a></p>
+        <p>© {{service.serviceGroup.salon.name}} - Wszystkie prawa zastrzeżone</p>
+    </div>
+</body>
+
+</html>

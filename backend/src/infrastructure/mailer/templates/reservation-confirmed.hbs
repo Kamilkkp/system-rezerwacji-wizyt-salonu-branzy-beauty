@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezerwacja potwierdzona</title>
+    {{{sharedStyles}}}
+</head>
+
+<body>
+    <div class="header success">
+        <h1>✅ Rezerwacja potwierdzona!</h1>
+        <p>Twoja wizyta została potwierdzona przez salon</p>
+    </div>
+
+    <div class="content">
+        <p>Witaj {{clientName}},</p>
+        <p>Potwierdzamy Twoją rezerwację na usługę <strong>{{service.name}}</strong>.</p>
+
+        <div class="reservation-details">
+            <h3>Szczegóły wizyty:</h3>
+            <ul>
+                <li><strong>Data i godzina:</strong> {{formatDateTime startTime}}</li>
+                <li><strong>Salon:</strong> {{service.serviceGroup.salon.name}}</li>
+                <li><strong>Adres:</strong> {{salon.address.streetName}} {{salon.address.streetNumber}} {{salon.address.apartment}}, {{salon.address.city}} {{salon.address.postalCode}}</li>
+            </ul>
+        </div>
+
+        <div class="salon-info">
+            <h3>Ważne informacje:</h3>
+            <p><strong>Prosimy o przybycie 10 minut przed wyznaczoną godziną.</strong></p>
+        </div>
+
+        {{#if promotionId}}
+        <div class="promotion-info">
+            <h3>🎉 Promocja!</h3>
+            <p>Gratulujemy! Skorzystałeś z promocji: <strong>{{Promotion.name}}</strong>
+                ({{Promotion.value}}{{#eq Promotion.type "PERCENTAGE"}}%{{else}} zł{{/eq}} rabatu)</p>
+        </div>
+        {{/if}}
+
+        <p>Pozdrawiamy,<br><strong>Zespół {{service.serviceGroup.salon.name}}</strong></p>
+
+        <div style="text-align: center; margin: 25px 0;">
+            <a href="{{reservationDetailsLink}}" class="button">Zobacz szczegóły rezerwacji</a>
+            <a href="{{icsDownloadLink}}" class="button secondary">Dodaj do kalendarza</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Otrzymujesz tę wiadomość, ponieważ wyraziłeś zgodę na powiadomienia.</p>
+        <p><a href="{{unsubscribeLink}}">Zrezygnuj z powiadomień</a></p>
+        <p>© {{service.serviceGroup.salon.name}} - Wszystkie prawa zastrzeżone</p>
+    </div>
+</body>
+
+</html>

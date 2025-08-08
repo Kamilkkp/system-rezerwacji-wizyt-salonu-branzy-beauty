@@ -1,0 +1,7 @@
+{
+    "cSpell.words": [
+        "deliverytime"
+    ],
+    "postman.settings.dotenv-detection-notification-visibility": false,
+    "jest.runMode":"deferred"
+}

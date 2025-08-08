@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Przypomnienie o wizycie</title>
+    {{{sharedStyles}}}
+</head>
+<body>
+    <div class="header warning">
+        <h1>🔔 Przypomnienie o wizycie</h1>
+        <p>Twoja wizyta rozpocznie się za {{reminderTimeText}}</p>
+    </div>
+
+    <div class="content">
+        <p>Dzień dobry!</p>
+        
+        <p>Przypominamy, że za <strong>{{reminderTimeText}}</strong> rozpocznie się Twoja wizyta w salonie <strong>{{salon.name}}</strong>.</p>
+
+        <div class="reservation-details">
+            <h3>Szczegóły wizyty:</h3>
+            <p><strong>Usługa:</strong> {{service.name}}</p>
+            <p><strong>Data i godzina:</strong> {{formatDateTime reservation.startTime}}</p>
+            <p><strong>Cena:</strong> {{reservation.price}} zł</p>
+            {{#if reservation.Promotion}}
+            <p><strong>Promocja:</strong> {{reservation.Promotion.name}}</p>
+            {{/if}}
+        </div>
+
+        <div class="salon-info">
+            <h3>Informacje o salonie:</h3>
+            <p><strong>Adres:</strong> {{salon.address.streetName}} {{salon.address.streetNumber}} {{salon.address.apartment}}, {{salon.address.city}} {{salon.address.postalCode}}</p>
+            {{#if salon.contactInfo.phone}}
+            <p><strong>Telefon:</strong> {{salon.contactInfo.phone}}</p>
+            {{/if}}
+            {{#if salon.contactInfo.email}}
+            <p><strong>Email:</strong> {{salon.contactInfo.email}}</p>
+            {{/if}}
+        </div>
+
+        <p>Prosimy o przybycie 10-15 minut przed umówioną godziną.</p>
+
+        <div style="text-align: center; margin: 25px 0;">
+            <a href="{{reservationDetailsLink}}" class="button">Zobacz szczegóły rezerwacji</a>
+        </div>
+
+        <p>W razie pytań lub potrzeby zmiany terminu, prosimy o kontakt z salonem.</p>
+    </div>
+
+    <div class="footer">
+        <p>To przypomnienie zostało wysłane automatycznie na podstawie Twojej rezerwacji.</p>
+        <p><a href="{{unsubscribeLink}}">Zrezygnuj z powiadomień</a></p>
+        <p>© {{salon.name}} - Wszystkie prawa zastrzeżone</p>
+    </div>
+</body>
+</html> 
