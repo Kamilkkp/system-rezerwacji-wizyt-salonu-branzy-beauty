@@ -2,11 +2,11 @@ import {
   IsBoolean,
   IsDate,
   IsEmail,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   IsUUID,
   Length,
-  ValidateIf,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { UUID } from 'crypto';
@@ -32,7 +32,7 @@ export class CreateReservationDto {
   @IsString()
   clientNotes!: string;
 
-  @ValidateIf((o: CreateReservationDto) => o.promotionId !== undefined)
+  @IsOptional()
   @IsUUID()
   promotionId?: UUID;
 
