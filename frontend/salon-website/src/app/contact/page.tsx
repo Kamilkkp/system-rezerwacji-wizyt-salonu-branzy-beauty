@@ -79,7 +79,7 @@ async function ContactPageContent() {
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Adres</h3>
                     <div className="text-gray-600 dark:text-gray-300">
                       <div>{salon.address.streetName} {salon.address.streetNumber}</div>
-                      {salon.address.apartment && <div>Mieszkanie {salon.address.apartment}</div>}
+                      {salon.address.apartment && <div>Lokal {salon.address.apartment}</div>}
                       <div>{salon.address.postalCode} {salon.address.city}</div>
                     </div>
                   </div>

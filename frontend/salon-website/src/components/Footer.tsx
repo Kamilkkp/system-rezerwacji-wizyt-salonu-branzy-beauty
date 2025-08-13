@@ -36,7 +36,7 @@ export default function Footer({ salon }: FooterProps) {
                   <MapPin className="h-4 w-4 mr-2 mt-0.5" />
                   <div>
                     <div>{salon.address.streetName} {salon.address.streetNumber}</div>
-                    {salon.address.apartment && <div>Mieszkanie {salon.address.apartment}</div>}
+                    {salon.address.apartment && <div>Lokal {salon.address.apartment}</div>}
                     <div>{salon.address.postalCode} {salon.address.city}</div>
                   </div>
                 </div>
