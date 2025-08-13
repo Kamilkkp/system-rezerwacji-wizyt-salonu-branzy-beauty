@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 async function ContactPageContent() {
   const salon = await getSalon();
 
